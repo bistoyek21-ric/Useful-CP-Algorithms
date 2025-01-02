@@ -11,15 +11,19 @@ int constexpr maxn = 2e5 + 5;
 vector<vector<int>> g[maxn];
 vector<int> euler_tour;
 bool mark[maxn];
+int adj[maxn];
 int n, m;
 
-void dfs(int u){
-    for(auto v: g[u])
+void dfs(int u, int ind = -1){
+    for(; adj[u] < g[u].size(); ++adj[u]){
+        auto v = g[u][adj[u]];
         if(!mark[v[1]]){
             mark[v[1]] = true;
-            euler_tour.pb(v[1]);
-            dfs(v[0]);
+            dfs(v[0], v[1]);
         }
+    }
+    if(~ind)
+        euler_tour.pb(ind);
     return;
 }
 
