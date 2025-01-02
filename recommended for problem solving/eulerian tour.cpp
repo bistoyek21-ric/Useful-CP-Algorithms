@@ -22,6 +22,8 @@ void dfs(int u, int ind = -1){
             ++adj[u];
             dfs(v[0], v[1]);
         }
+        else
+            ++adj[u];
     }
     if(~ind)
         euler_tour.pb(ind);
