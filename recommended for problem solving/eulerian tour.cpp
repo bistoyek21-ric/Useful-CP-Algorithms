@@ -15,10 +15,11 @@ int adj[maxn];
 int n, m;
 
 void dfs(int u, int ind = -1){
-    for(; adj[u] < g[u].size(); ++adj[u]){
+    while(adj[u] < g[u].size()){
         auto v = g[u][adj[u]];
         if(!mark[v[1]]){
             mark[v[1]] = true;
+            ++adj[u];
             dfs(v[0], v[1]);
         }
     }
