@@ -4,30 +4,29 @@
 #pragma GCC optimize("unroll-loops")
 using namespace std;
 
-int constexpr maxn = 1000004, mod = 1000000021, bs = 2;
+int constexpr maxn = 1e6 + 5, mod = 1000000021, bs = 2;
 
 bool ans;
 
-int n[2], h[2][maxn], sh[maxn], sc[maxn], cld[2][maxn], p4[maxn];
+int n[2], h[2][maxn], cld[2][maxn], pbs2[maxn];
 
 vector<int> g[2][maxn];
 
 vector<pair<int, int>> ahs;
 
 void preprocess(){
-    p4[0] = 1;
+    pbs2[0] = 1;
     for(int i = 1; i < maxn; ++i)
-        p4[i] = (p4[i - 1] * bs * bs) % mod;
+        pbs2[i] = (pbs2[i - 1] * ((bs * bs) % mod )) % mod;
     return;
 }
 
 void dfs(int u, int par, int i){
-    cld[i][u] = 1;
+    h[i][u] = cld[i][u] = 1;
     if(par != -1 && g[i][u].size() == 1){
-        h[i][u] = 2;
+        h[i][u] *= bs;
         return;
     }
-    h[i][u] = 1;
     for(int &v: g[i][u])
         if(v != par){
             dfs(v, u, i);
@@ -39,7 +38,7 @@ void dfs(int u, int par, int i){
             ahs.emplace_back(pair<int, int>{h[i][v], v});
     sort(ahs.begin(), ahs.end());
     for(auto &e: ahs){
-        h[i][u] = (h[i][u] * p4[cld[i][e.second]]) % mod;
+        h[i][u] = (h[i][u] * pbs2[cld[i][e.second]]) % mod;
         h[i][u] = (h[i][u] + e.first) % mod;
     }
     h[i][u] = (h[i][u] * bs) % mod;
@@ -47,11 +46,12 @@ void dfs(int u, int par, int i){
 }
 
 void dfs1(int u, int par){
-    sh[u] = h[1][u];
-    sc[u] = cld[1][u];
+    int shu, scu, shpar, scpar;
+    shu = h[1][u];
+    scu = cld[1][u];
     if(~par){////////////////~par
-        sh[par] = h[1][par];
-        sc[par] = cld[1][par];
+        shpar = h[1][par];
+        scpar = cld[1][par];
         cld[1][par] = n[1] - cld[1][u];
         cld[1][u] = n[1];
         ////-------------- update par -> child
@@ -65,7 +65,7 @@ void dfs1(int u, int par){
         else{
             sort(ahs.begin(), ahs.end());
             for(auto &e: ahs){
-                h[1][par] = (h[1][par] * p4[cld[1][e.second]]) % mod;
+                h[1][par] = (h[1][par] * pbs2[cld[1][e.second]]) % mod;
                 h[1][par] = (h[1][par] + e.first) % mod;
             }
             h[1][par] = (h[1][par] * bs) % mod;
@@ -77,7 +77,7 @@ void dfs1(int u, int par){
         h[1][u] = 1;
         sort(ahs.begin(), ahs.end());
         for(auto &e: ahs){
-            h[1][u] = (h[1][u] * p4[cld[1][e.second]]) % mod;
+            h[1][u] = (h[1][u] * pbs2[cld[1][e.second]]) % mod;
             h[1][u] = (h[1][u] + e.first) % mod;
         }
         h[1][u] = (h[1][u] * bs) % mod;
@@ -92,11 +92,11 @@ void dfs1(int u, int par){
         if(v != par)
             dfs1(v, u);
     if(~par){
-        h[1][par] = sh[par];
-        cld[1][par] = sc[par];
+        h[1][par] = shpar;
+        cld[1][par] = scpar;
     }
-    h[1][u] = sh[u];
-    cld[1][u] = sc[u];
+    h[1][u] = shu;
+    cld[1][u] = scu;
     return;
 }
 
