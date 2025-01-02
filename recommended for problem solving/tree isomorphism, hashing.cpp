@@ -8,16 +8,16 @@ int constexpr maxn = 1000004, mod = 1000000021, bs = 2;
 
 bool ans;
 
-int n[2], h[2][maxn], sh[maxn], sc[maxn], cld[2][maxn], p9[maxn];
+int n[2], h[2][maxn], sh[maxn], sc[maxn], cld[2][maxn], p4[maxn];
 
 vector<int> g[2][maxn];
 
 vector<pair<int, int>> ahs;
 
 void preprocess(){
-    p9[0] = 1;
+    p4[0] = 1;
     for(int i = 1; i < maxn; ++i)
-        p9[i] = (p9[i - 1] * 9) % mod;
+        p4[i] = (p4[i - 1] * bs * bs) % mod;
     return;
 }
 
@@ -39,10 +39,10 @@ void dfs(int u, int par, int i){
             ahs.emplace_back(pair<int, int>{h[i][v], v});
     sort(ahs.begin(), ahs.end());
     for(auto &e: ahs){
-        h[i][u] = (h[i][u] * p9[cld[i][e.second]]) % mod;
+        h[i][u] = (h[i][u] * p4[cld[i][e.second]]) % mod;
         h[i][u] = (h[i][u] + e.first) % mod;
     }
-    h[i][u] = (h[i][u] * 3 + 2) % mod;
+    h[i][u] = (h[i][u] * bs) % mod;
     return;
 }
 
@@ -61,14 +61,14 @@ void dfs1(int u, int par){
                 ahs.emplace_back(pair<int, int>{h[1][v], v});
         h[1][par] = 1;
         if(g[1][par].size() == 1)
-            h[1][par] = 2;
+            h[1][par] *= bs;
         else{
             sort(ahs.begin(), ahs.end());
             for(auto &e: ahs){
-                h[1][par] = (h[1][par] * p9[cld[1][e.second]]) % mod;
+                h[1][par] = (h[1][par] * p4[cld[1][e.second]]) % mod;
                 h[1][par] = (h[1][par] + e.first) % mod;
             }
-            h[1][par] = (h[1][par] << 1) % mod;
+            h[1][par] = (h[1][par] * bs) % mod;
         }
         ////------------- update u -> root
         ahs.clear();
@@ -77,10 +77,10 @@ void dfs1(int u, int par){
         h[1][u] = 1;
         sort(ahs.begin(), ahs.end());
         for(auto &e: ahs){
-            h[1][u] = (h[1][u] * p9[cld[1][e.second]]) % mod;
+            h[1][u] = (h[1][u] * p4[cld[1][e.second]]) % mod;
             h[1][u] = (h[1][u] + e.first) % mod;
         }
-        h[1][u] = (h[1][u] * 3 + 2) % mod;
+        h[1][u] = (h[1][u] * bs) % mod;
         if(h[0][0] == h[1][u])
             ans = true;
     }////////////////// ~par end
@@ -141,7 +141,7 @@ void give_output(){
 signed main(){
     ios::sync_with_stdio(0), cin.tie(0);
     int tst = 1;
-    cin >> tst;
+    //cin >> tst;
     preprocess();
     while(tst--){
         get_input();
