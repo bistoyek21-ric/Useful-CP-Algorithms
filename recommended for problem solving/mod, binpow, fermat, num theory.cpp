@@ -11,11 +11,15 @@ int constexpr maxn = 2e5 + 10, mod = 1e9 + 7, bs = 2;
 int fact[maxn], ifact[maxn], pbs[maxn], ipbs[maxn];
 
 int S(int x, int y){
-	return (((x + y) % mod) + mod) % mod;
+    x = (x + mod) % mod;
+    y = (y + mod) % mod;
+	return (x + y) % mod;
 }
 
 int P(int x, int y){
-	return (((x * y) % mod) + mod) % mod;
+    x = (x + mod) % mod;
+    y = (y + mod) % mod;
+	return (x * y) % mod;
 }
 
 int binpow(int x, int y){
