@@ -24,7 +24,7 @@ struct fenwick_tree{
 
 	void build(int n){
 	    this->n = n;
-	    bit.assign(n + 1, 0);
+	    bit.assign(n + 1, -inf);
 	    return;
 	}
 
@@ -66,11 +66,11 @@ void test_case(){
             r = a[i][1], ++ans;
     cout << ans << '\n';
     #else
+    fenwick_tree fen;
     vector<int> r;
     for(int i = 0; i < n; ++i)
         r.pb(a[i][2]);
     sort(r.begin(), r.end());
-    fenwick_tree fen;
     for(int i = 0; i < n; ++i){
         dp[i][0] = (i ? max(dp[i - 1][0], dp[i - 1][1]) : 0);
         int pos = lower_bound(r.begin(), r.end(), a[i][1]) - r.begin();
