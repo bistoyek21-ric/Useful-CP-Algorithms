@@ -15,6 +15,7 @@ vector<int> a[maxn];
 #define JUST_GREEDY
 
 #ifndef JUST_GREEDY
+
 int dp[2][maxn];
 
 struct fenwick_tree{
@@ -67,6 +68,7 @@ void test_case(){
     cout << ans << '\n';
     #else
     fenwick_tree fen;
+    fen.build(n);
     vector<int> r;
     for(int i = 0; i < n; ++i)
         r.pb(a[i][2]);
