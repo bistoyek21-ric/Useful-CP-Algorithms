@@ -12,9 +12,9 @@ int n, m, k;
 
 vector<int> a[maxn];
 
-#define JUST_GREEDY
+//#define CLASSIC_GREEDY
 
-#ifndef JUST_GREEDY
+#ifndef CLASSIC_GREEDY
 
 int dp[2][maxn];
 
@@ -53,14 +53,14 @@ void test_case(){
     for(int i = 0; i < n; ++i){
         a[i] = vector<int>(3);
         cin >> a[i][0] >> a[i][1];
-        #ifdef JUST_GREEDY
+        #ifdef CLASSIC_GREEDY
         a[i][2] = 1;
         #else
         cin >> a[i][2];
         #endif
     }
     sort(a, a + n);
-    #ifdef JUST_GREEDY
+    #ifdef CLASSIC_GREEDY
     int ans = 0, r = -inf;
     for(int i = 0; i < n; ++i)
         if(r < a[i][0])
@@ -77,7 +77,8 @@ void test_case(){
         dp[i][0] = (i ? max(dp[i - 1][0], dp[i - 1][1]) : 0);
         int pos = lower_bound(r.begin(), r.end(), a[i][1]) - r.begin();
         dp[i][1] = a[i][2] + max(fen.query(pos), 0LL);
-        fen.update(pos + 1, dp[i][1]);
+        pos = lower_bound(r.begin(), r.end(), a[i][2]) - r.begin() + 1;
+        fen.update(pos, dp[i][1]);
     }
     cout << max(dp[n - 1][0], dp[n - 1][1]) << '\n';
     #endif
