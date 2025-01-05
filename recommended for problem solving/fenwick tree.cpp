@@ -9,31 +9,31 @@ using namespace std;
 int constexpr maxn = 2e5 + 5;
 
 struct fenwick_tree{
-
      int n;
 
 	vector<int> bit;
 
-	fenwick_tree(int n){
+	void build(int n){
 	    this->n = n;
-	    bit.assign(n, 0);
+	    bit.assign(n + 1, 0);
+	    return;
 	}
 
-	void add(int ind, int val){
+	void update(int ind, int val){
 		for(int i = ind; i < bit.size(); i += i & (-i))
 			bit[i] += val;
 		return;
 	}
 
-	int ps(int ind){
+	int query(int ind){
 		int sum = 0;
-		for(int i = ind; i; i -= i & (-i))
-			sum = S(sum, bit[i]);
+		for(int i = ind; 0 < i; i -= i & (-i))
+			sum += bit[i];
 		return sum;
 	}
 
-	int sum(int l, int r){
-        return S(ps(r), -(l - 1 ? ps(l - 1) : 0));
+	int common_query(int l, int r){
+        return query(r) - query(l - 1);
     }
 };
 
