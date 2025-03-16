@@ -17,30 +17,29 @@ void preprocess(){
 
 void give_input(){
     cin >> n;
-    for(int i = 0; i < n + 1; ++i)
+    for(int i = 0; i <= n; ++i)
         cin >> a[i];
-    for(int i = 1; i <= n; ++i){
-        for(int j = 0; j + i <= n; ++j){
-            if(i == 1)
-                dp[i][i + j] = 0;
-            else{
-                dp[i][i + j] = inf;
-                for(int k = i + 1; k < i + j; ++k)
-                    dp[i][i + j] = min(dp[i][k] + dp[k][i] + a[k] * a[k - 1], dp[i][i + j]);
-            }
-        }
-    }
     cout << dp[0][n] << '\n';
     return;
 }
 
 void process(){
-
+    for(int i = 1; i <= n; ++i){
+        for(int j = 0; j + i <= n; ++j){
+            if(i == 1)
+                dp[j][i + j] = 0;
+            else{
+                dp[j][i + j] = inf;
+                for(int k = j + 1; k < j + i; ++k)
+                    dp[j][i + j] = min(dp[j][k] + dp[k][j + i] + a[j] * a[k] * a[j + i], dp[j][j + i]);
+            }
+        }
+    }
     return;
 }
 
 void get_output(){
-
+    cout << dp[0][n] << '\n';
 	return;
 }
 
